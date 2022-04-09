@@ -1,0 +1,3 @@
+mongodb_bi_logs/
+**/*/node_modules/
+.env

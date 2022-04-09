@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mongodb_bi:
+    container_name: seattle_schedler_mongo_bi
+    image: ryanhs/mongodb-bi-connector
+    environment:
+      MONGODB_HOST: seattle_schedler_mongo
+    volumes:
+      - ./mongodb_bi_logs:/var/log
+    ports:
+      - 3307:3307
+    networks:
+      - scheduler_external-net
+  cube:
+    container_name: seattle_schedler_cube
+    image: cubejs/cube
+    depends_on:
+      - seattle_schedler_mongo_bi
+    environment:
+      CUBEJS_DEV_MODE: true
+    ports:
+      - 4000:4000
+    volumes:
+      - ./cube:/cube/conf
+    networks:
+      - scheduler_external-net
+
+networks:
+  scheduler_external-net:
+    external: true
